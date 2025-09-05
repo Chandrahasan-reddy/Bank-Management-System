@@ -123,7 +123,7 @@ public class BankManagementSystem {
 			System.out.println("2. Deposite (Chandra hasan reddy - Savings)");
 			System.out.println("3. Withdraw (Chandra hasan reddy - Savings)");
 			System.out.println("4. Deposite (Hasan Reddy - Current)");
-			System.out.println("5. Deposite (Hasan reddy - Current)");
+			System.out.println("5. Withdraw (Hasan reddy - Current)");
 			System.out.println("6. Exit");
 			System.out.println("Enter Choice");
 			choice = scan.nextInt();
