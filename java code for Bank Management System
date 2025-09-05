@@ -1,0 +1,166 @@
+package com.bankManagementSystem;
+
+import java.util.Scanner;
+
+abstract class BankAccount
+{
+	private String accountNumber;
+	private String holderName;
+	protected double balance;
+	
+	public BankAccount(String accountNumber, String holderName, double balance)
+	{
+		this.accountNumber = accountNumber;
+		this.holderName = holderName;
+		this.balance = balance;
+		
+	}
+	
+	//getters
+	public String getAccountNumber()
+	{
+		return accountNumber;
+	}
+	
+	public String getHolderName()
+	{
+		return holderName;
+	}
+	public double getBalance()
+	{
+		return balance;
+	}
+	
+	//Abstract methods
+	public abstract void deposite(double amount);
+	public abstract void withdraw(double amount);
+	
+	
+	public void displayAccountInfo()
+	{
+		System.out.println("Account: " + accountNumber + " | Holder: " + holderName + " | Balance: " + balance);
+	}
+	
+}
+
+class SavingsAccount extends BankAccount
+{
+	private double interestRate;
+	public SavingsAccount(String accountNumber, String holderName, double balance, double interestRate)
+	{
+		super(accountNumber, holderName, balance);
+		this.interestRate = interestRate;
+	}
+	
+	@Override
+	public void deposite(double amount)
+	{
+		balance = balance + amount + (amount * interestRate / 100);
+		System.out.println("Deposited: " + amount + "with interest. New Balance: " + balance);
+	}
+	@Override
+	public void withdraw(double amount)
+	{
+		if(balance >= amount)
+		{
+			balance = balance - amount;
+			System.out.println("Withdrew " + amount + ". New balance: " + balance);
+		}
+		else
+		{
+			System.out.println("Insufficient funds!");
+		}
+	}
+	
+	
+}
+class CurrentAccount extends BankAccount
+{
+	private double overdraftLimit;
+	public CurrentAccount(String accountNumber, String holderName, double balance, double OverdraftLimit)
+	{
+		super(accountNumber, holderName, balance);
+		this.overdraftLimit = OverdraftLimit;
+	}
+	@Override
+	public void deposite(double amount)
+	{
+		balance = balance + amount;
+		System.out.println("Deposited " + amount + ". New balance: " + balance);
+	}
+	@Override
+	public void withdraw(double amount)
+	{
+		if(balance + overdraftLimit >= amount)
+		{
+			balance = balance - amount;
+			System.out.println("withdrew " + amount + ". New balance: " + amount);
+		}
+		else
+		{
+			System.out.println("withdrawal exceeds overdraft limit!");
+		}
+	}
+	
+	
+}
+
+
+public class BankManagementSystem {
+	public static void main(String[] args)
+	{
+		Scanner scan = new Scanner(System.in);
+		//polymorphism: parent reference but child objects
+		BankAccount acc1 = new SavingsAccount("234567890492", "Chandra hasan reddy", 100000, 5.0);
+		BankAccount acc2 = new CurrentAccount("2345678900493", "Hasan Reddy", 15000, 1000);
+		
+		// menu-driven
+		int choice;
+		do
+		{
+			System.out.println("\n==== BANK MENU ====");
+			System.out.println("1. Account Info");
+			System.out.println("2. Deposite (Chandra hasan reddy - Savings)");
+			System.out.println("3. Withdraw (Chandra hasan reddy - Savings)");
+			System.out.println("4. Deposite (Hasan Reddy - Current)");
+			System.out.println("5. Deposite (Hasan reddy - Current)");
+			System.out.println("6. Exit");
+			System.out.println("Enter Choice");
+			choice = scan.nextInt();
+			
+			switch (choice)
+			{
+			case 1:
+				acc1.displayAccountInfo();
+				acc2.displayAccountInfo();
+				break;
+			case 2:
+				System.out.print("Enter deposite amount: ");
+				acc1.deposite(scan.nextDouble());
+				break;
+			case 3:
+				System.out.print("Enter withdraw amount: ");
+				acc1.withdraw(scan.nextDouble());
+				break;
+			case 4:
+				System.out.print("Enter deposite amount: ");
+				acc2.deposite(scan.nextDouble());
+				break;
+			case 5:
+				System.out.print("Enter withdraw amount: ");
+				acc2.withdraw(scan.nextDouble());
+				break;
+			case 6:
+				System.out.println("Thank tou for using the system!");
+				break;
+			default:
+				System.out.println("Invalid choice");
+					
+			}
+			
+		}
+		while(choice != 6);
+		scan.close();
+	}
+
+}
